@@ -20,8 +20,7 @@ function clearPage () {
 }
 
 // Оголошення функції рендеру
-function renderCountriesList(countries) {
-  
+function renderCountriesList (countries) {
   // Очищення попередніх результатів
   clearPage ();
 
@@ -33,7 +32,6 @@ function renderCountriesList(countries) {
       );
 
     case countries.length === 1:
-
       // Деструктуризація даних об'єкту країна
       const {name, capital, population, flag, languages} = countries[0];
 
@@ -42,15 +40,16 @@ function renderCountriesList(countries) {
         return ` ${language.name}`;
       });
 
-      refs.countryInfo.innerHTML = `<p><img class="flag-picture" src="${flag}" alt="flag of country" height=40px><b style = "font-size:50px;"> ${name}</b></p>
+      let countryMarkup = `<p><img class="flag-picture" src="${flag}" alt="flag of country" height=40px><b style = "font-size:50px;"> ${name}</b></p>
       <p><b>capital</b>: ${capital}</p>
       <p><b>population</b>: ${population}</p>
       <p><b>languages</b>: ${languagesList} </p>`;
+      refs.countryInfo.insertAdjacentHTML("beforeend", countryMarkup);
 
       break;
 
     case countries.length > 1 && countries.length < 10:
-      refs.countryList.innerHTML = countries
+      let countriesMarkup = countries
         .map (country => {
           return `<li>
       <p><img class="flag-picture" src="${country.flag}" alt="flag of country" height=20px> ${country.name}</p>
@@ -58,10 +57,12 @@ function renderCountriesList(countries) {
         })
         .join ('');
 
+      refs.countryList.insertAdjacentHTML("beforeend", countriesMarkup);
+
       break;
 
     default:
-    clearPage ();
+      clearPage ();
   }
 }
 
@@ -76,16 +77,14 @@ function countriesInputHandler () {
 
   // Якщо інпут пустий, то очищуємо вміст сторінки
   if (refs.searchBox.value === '') {
-    clearPage();
-  }
-  // Якщо введено дані, то робимо запит на сервер
-  else {
-      fetchCountries (country)
+    clearPage ();
+  } else {
+    // Якщо введено дані, то робимо запит на сервер
+    fetchCountries (country)
       .then (countries => renderCountriesList (countries))
       .catch (error => {
         clearPage ();
         Notiflix.Notify.failure ('Oops, there is no country with that name');
       });
   }
-
-};
+}
