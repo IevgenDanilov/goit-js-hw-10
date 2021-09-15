@@ -8,7 +8,7 @@ const DEBOUNCE_DELAY = 300;
 // створення об'єкту посилань
 const refs = {
   searchBox: document.querySelector ('#search-box'),
-  countryList: document.querySelector ('.country-list'),
+  countryList: document.querySelector (["searchQuery"]),
   countryInfo: document.querySelector ('.country-info'),
   body: document.body,
 };
